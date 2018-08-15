@@ -27,15 +27,15 @@ class Pdo extends \OAuth2\Storage\Pdo
                 
                 $connection = $db->pdo;
                 $config = array_merge(array(
-                    'client_table' => $db->tablePrefix . 'oauth_clients',
-                    'access_token_table' => $db->tablePrefix . 'oauth_access_tokens',
-                    'refresh_token_table' => $db->tablePrefix . 'oauth_refresh_tokens',
-                    'code_table' => $db->tablePrefix . 'oauth_authorization_codes',
-                    'user_table' => $db->tablePrefix . 'oauth_users',
-                    'jwt_table'  => $db->tablePrefix . 'oauth_jwt',
-                    'jti_table'  => $db->tablePrefix . 'oauth_jti',
-                    'scope_table'  => $db->tablePrefix . 'oauth_scopes',
-                    'public_key_table'  => $db->tablePrefix . 'oauth_public_keys',
+                    'client_table' => 'oauth2_access_control.' . 'oauth_clients',
+                    'access_token_table' => 'oauth2_access_control.' . 'oauth_access_tokens',
+                    'refresh_token_table' => 'oauth2_access_control.' . 'oauth_refresh_tokens',
+                    'code_table' => 'oauth2_access_control.' . 'oauth_authorization_codes',
+                    'user_table' => 'oauth2_access_control.' . 'oauth_users',
+                    'jwt_table'  => 'oauth2_access_control.' . 'oauth_jwt',
+                    'jti_table'  => 'oauth2_access_control.' . 'oauth_jti',
+                    'scope_table'  => 'oauth2_access_control.' . 'oauth_scopes',
+                    'public_key_table'  => 'oauth2_access_control.' . 'oauth_public_keys',
                 ), $config);
                 
             } else {
