@@ -70,6 +70,11 @@ class Module extends \yii\base\Module
     public $useJwtToken = false;//ADDED
 
     /**
+     * @var string default schema name
+     */
+    public $storageSchema = 'oauth2_access_control';
+
+    /**
      * @inheritdoc
      */
     public function init()
@@ -86,13 +91,12 @@ class Module extends \yii\base\Module
      */
     public function getServer()
     {
-        if(!$this->has('oauth2server', true)) {
+        if (!$this->has('oauth2server', true)) {
             $storages = [];
 
-            if($this->useJwtToken)
-            {
-                if(!array_key_exists('access_token', $this->storageMap) || !array_key_exists('public_key', $this->storageMap)) {
-                        throw new \yii\base\InvalidConfigException('access_token and public_key must be set or set useJwtToken to false');
+            if ($this->useJwtToken) {
+                if (!array_key_exists('access_token', $this->storageMap) || !array_key_exists('public_key', $this->storageMap)) {
+                    throw new \yii\base\InvalidConfigException('access_token and public_key must be set or set useJwtToken to false');
                 }
                 //define dependencies when JWT is used instead of normal token
                 \Yii::$container->clear('public_key'); //remove old definition
@@ -103,13 +107,17 @@ class Module extends \yii\base\Module
                 \Yii::$container->set('access_token', $this->storageMap['access_token']);
             }
 
-            foreach(array_keys($this->storageMap) as $name) {
-                $storages[$name] = \Yii::$container->get($name);
+            foreach (array_keys($this->storageMap) as $name) {
+                if ('filsh\yii2\oauth2server\storage\Pdo' == $name) {
+                    $storages[$name] = \Yii::$container->get($name, [], ['storageSchema' => $this->storageSchema]);
+                } else {
+                    $storages[$name] = \Yii::$container->get($name);
+                }
             }
 
             $grantTypes = [];
-            foreach($this->grantTypes as $name => $options) {
-                if(!isset($storages[$name]) || empty($options['class'])) {
+            foreach ($this->grantTypes as $name => $options) {
+                if (!isset($storages[$name]) || empty($options['class'])) {
                     throw new \yii\base\InvalidConfigException('Invalid grant types configuration.');
                 }
 
@@ -142,7 +150,7 @@ class Module extends \yii\base\Module
 
     public function getRequest()
     {
-        if(!$this->has('oauth2request', true)) {
+        if (!$this->has('oauth2request', true)) {
             $this->set('oauth2request', Request::createFromGlobals());
         }
         return $this->get('oauth2request');
@@ -150,7 +158,7 @@ class Module extends \yii\base\Module
 
     public function getResponse()
     {
-        if(!$this->has('oauth2response', true)) {
+        if (!$this->has('oauth2response', true)) {
             $this->set('oauth2response', new Response());
         }
         return $this->get('oauth2response');
@@ -163,9 +171,9 @@ class Module extends \yii\base\Module
      */
     public function registerTranslations()
     {
-        if(!isset(Yii::$app->get('i18n')->translations['modules/oauth2/*'])) {
+        if (!isset(Yii::$app->get('i18n')->translations['modules/oauth2/*'])) {
             Yii::$app->get('i18n')->translations['modules/oauth2/*'] = [
-                'class'    => PhpMessageSource::className(),
+                'class' => PhpMessageSource::className(),
                 'basePath' => __DIR__ . '/messages',
             ];
         }

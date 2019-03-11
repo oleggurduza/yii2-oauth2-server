@@ -33,6 +33,7 @@ To use this extension,  simply add the following code in your application config
         'class' => 'filsh\yii2\oauth2server\Module',
         'tokenParamName' => 'accessToken',
         'tokenAccessLifetime' => 3600 * 24,
+        'storageSchema'=>'oauth2_access_control.',
         'storageMap' => [
             'user_credentials' => 'common\models\User',
         ],

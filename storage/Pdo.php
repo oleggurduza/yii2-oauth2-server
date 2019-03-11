@@ -5,39 +5,41 @@ namespace filsh\yii2\oauth2server\storage;
 class Pdo extends \OAuth2\Storage\Pdo
 {
     public $dsn;
-    
+
     public $username;
-    
+
     public $password;
-    
+
     public $connection = 'db';
-    
+
+    public $storageSchema = 'oauth2_access_control';
+
     public function __construct($connection = null, $config = array())
     {
-        if($connection === null) {
-            if($this->connection !== null && \Yii::$app->has($this->connection)) {
+        if ($connection === null) {
+            if ($this->connection !== null && \Yii::$app->has($this->connection)) {
                 $db = \Yii::$app->get($this->connection);
-                if(!($db instanceof \yii\db\Connection)) {
+                if (!($db instanceof \yii\db\Connection)) {
                     throw new \yii\base\InvalidConfigException('Connection component must implement \yii\db\Connection.');
                 }
-                
-                if(!$db->getIsActive()) {
+
+                if (!$db->getIsActive()) {
                     $db->open();
                 }
-                
+
                 $connection = $db->pdo;
                 $config = array_merge(array(
-                    'client_table' => 'oauth2_access_control.' . 'oauth_clients',
-                    'access_token_table' => 'oauth2_access_control.' . 'oauth_access_tokens',
-                    'refresh_token_table' => 'oauth2_access_control.' . 'oauth_refresh_tokens',
-                    'code_table' => 'oauth2_access_control.' . 'oauth_authorization_codes',
-                    'user_table' => 'oauth2_access_control.' . 'oauth_users',
-                    'jwt_table'  => 'oauth2_access_control.' . 'oauth_jwt',
-                    'jti_table'  => 'oauth2_access_control.' . 'oauth_jti',
-                    'scope_table'  => 'oauth2_access_control.' . 'oauth_scopes',
-                    'public_key_table'  => 'oauth2_access_control.' . 'oauth_public_keys',
+                    'client_table' => $this->storageSchema . '.' . 'oauth_clients',
+                    'access_token_table' => $this->storageSchema . '.' . 'oauth_access_tokens',
+                    'refresh_token_table' => $this->storageSchema . '.' . 'oauth_refresh_tokens',
+                    'code_table' => $this->storageSchema . '.' . 'oauth_authorization_codes',
+                    'user_table' => $this->storageSchema . '.' . 'oauth_users',
+                    'jwt_table' => $this->storageSchema . '.' . 'oauth_jwt',
+                    'jti_table' => $this->storageSchema . '.' . 'oauth_jti',
+                    'scope_table' => $this->storageSchema . '.' . 'oauth_scopes',
+                    'public_key_table' => $this->storageSchema . '.' . 'oauth_public_keys',
                 ), $config);
-                
+
             } else {
                 $connection = [
                     'dsn' => $this->dsn,
@@ -46,7 +48,7 @@ class Pdo extends \OAuth2\Storage\Pdo
                 ];
             }
         }
-        
+
         parent::__construct($connection, $config);
     }
 }
