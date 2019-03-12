@@ -110,7 +110,7 @@ class Module extends \yii\base\Module
 
             foreach (array_keys($this->storageMap) as $name) {
                 if (isset($this->storageMap[$name]) && 'filsh\yii2\oauth2server\storage\Pdo' == $this->storageMap[$name]) {
-                    $storages[$name] = \Yii::$container->get($name, [], ['storageSchema' => $this->storageSchema]);
+                    $storages[$name] = \Yii::$container->get($name, [null,[],$this->storageSchema]);
                 } else {
                     $storages[$name] = \Yii::$container->get($name);
                 }
