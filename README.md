@@ -1,8 +1,8 @@
 Yii2 Oauth2 Server
 ==================
 
-A wrapper for implementing an OAuth2 Server(https://github.com/bshaffer/oauth2-server-php).
-This is a fork of https://github.com/Filsh/yii2-oauth2-server. I decided to fork it after a long standing issue of branches not being resolved at original repo.
+A wrapper for implementing an OAuth2 Server(https://github.com/oleggurduza/oauth2-server-php).
+This is a fork of https://github.com/bshaffer/yii2-oauth2-server. I decided to fork it after a long standing issue of branches not being resolved at original repo.
 There is no guarantee that the two will remain compartible so check out things to see if there is anything broke while transiting.
 
 Installation
@@ -19,7 +19,7 @@ php composer.phar require --prefer-dist hosannahighertech/yii2-oauth2-server "*"
 or add
 
 ```json
-"hosannahighertech/yii2-oauth2-server": "1.0.*"
+"oleggurduza/yii2-oauth2-server": "1.0.*"
 ```
 
 to the require section of your composer.json. 
@@ -33,7 +33,7 @@ To use this extension,  simply add the following code in your application config
         'class' => 'filsh\yii2\oauth2server\Module',
         'tokenParamName' => 'accessToken',
         'tokenAccessLifetime' => 3600 * 24,
-        'storageSchema'=>'oauth2_access_control.',
+        'storageSchema' => '', // empty or schema 
         'storageMap' => [
             'user_credentials' => 'common\models\User',
         ],
@@ -217,4 +217,3 @@ class PublicKeyStorage implements \OAuth2\Storage\PublicKeyInterface{
 ``` 
 
 
-For more, see https://github.com/bshaffer/oauth2-server-php

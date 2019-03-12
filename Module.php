@@ -16,6 +16,7 @@ use OAuth2\Response;
  *     'class' => 'filsh\yii2\oauth2server\Module',
  *     'tokenParamName' => 'accessToken',
  *     'tokenAccessLifetime' => 3600 * 24,
+ *     'storageSchema' => '', empty or schema
  *     'storageMap' => [
  *         'user_credentials' => 'common\models\User',
  *     ],
@@ -72,7 +73,7 @@ class Module extends \yii\base\Module
     /**
      * @var string default schema name
      */
-    public $storageSchema = 'oauth2_access_control';
+    public $storageSchema = '';
 
     /**
      * @inheritdoc
@@ -108,7 +109,7 @@ class Module extends \yii\base\Module
             }
 
             foreach (array_keys($this->storageMap) as $name) {
-                if ('filsh\yii2\oauth2server\storage\Pdo' == $name) {
+                if (isset($this->storageMap[$name]) && 'filsh\yii2\oauth2server\storage\Pdo' == $this->storageMap[$name]) {
                     $storages[$name] = \Yii::$container->get($name, [], ['storageSchema' => $this->storageSchema]);
                 } else {
                     $storages[$name] = \Yii::$container->get($name);
